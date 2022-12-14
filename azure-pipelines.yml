@@ -17,7 +17,7 @@ steps:
       bash: |
          sudo npm install -g handlebars-cmd
       
-         cat <<EOF > owaspzap/nunit-template.hbs
+         cat owaspzap/nunit-template.hbs
          {{#each site}}
       
          <test-run
@@ -65,9 +65,8 @@ steps:
              </test-suite>
          </test-run>
          {{/each}}
-         EOF
-        displayName: 'owasp nunit template'
-        condition: always()
+         
+
 
 
 - task: DownloadSecureFile@1
