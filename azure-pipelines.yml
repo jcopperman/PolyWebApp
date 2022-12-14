@@ -28,7 +28,7 @@ steps:
     url: 'https://polymath-lilith.azurewebsites.net/'
     provideCustomContext: true
     contextPath: './Default Context.context'
-    threshold: 110
+    threshold: 115
     port: '8080'
 
 
