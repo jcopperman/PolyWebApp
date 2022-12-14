@@ -17,9 +17,17 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+
+- task: DownloadSecureFile@1
+  inputs:
+    secureFile: 'Default Context.context'
  
 - task: owaspzap@1
   inputs:
     scantype: 'targetedScan'
     url: 'https://polymath-lilith.azurewebsites.net/'
+    provideCustomContext: true
+    contextPath: './Default Context.context'
+
+
 
