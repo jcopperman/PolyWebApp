@@ -29,7 +29,7 @@ steps:
     provideCustomContext: true
     contextPath: './Default Context.context'
     threshold: 110
-    port: ''
+    port: '8080'
 
 
 
