@@ -10,37 +10,23 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: DownloadSecureFile@1
-  displayName: Get OWASP target context
+- task: DockerInstaller@0
   inputs:
-    secureFile: 'Default Context.context'
- 
-- task: owaspzap@1
-  inputs:
-    scantype: 'targetedScan'
-    url: 'https://polymath-lilith.azurewebsites.net/'
-    provideCustomContext: true
-    contextPath: './Default Context.context'
-    threshold: 115
-    port: '8080'
- 
-- task: Bash@3
-  inputs:
-     targetType: 'inline'
-     script: 'sudo npm install -g handlebars-cmd'
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      - bash: ' handlebars owaspzap/report.json < owaspzap/nunit-template.hbs > owaspzap/test-results.xml'
+    dockerVersion: '17.09.0-ce'
 
-
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results **/TEST-*.xml'
+- task: CmdLine@2
   inputs:
-    testResultsFormat: NUnit
-    testResultsFiles: 'owaspzap/test-results.xml'
-  condition: always()
+    script: 'docker run -u zap -p 8080:8080 -i owasp/zap2docker-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.key change-me-9203935709 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true'
+  displayName: Docker run Zap
+
+- task: OwaspZapScan@2
+  inputs:
+    ZapApiUrl: 'http://0.0.0.0:8090/'
+    ZapApiKey: 'change-me-9203935709'
+    TargetUrl: 'https://polymath-lilith.azurewebsites.net/'
+    ExecuteSpiderScan: false
+    ExecuteActiveScan: false
+    EnableVerifications: false
 
 
 
